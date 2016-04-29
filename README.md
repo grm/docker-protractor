@@ -16,6 +16,7 @@ Installed software
    * [Firefox](https://www.mozilla.org/en-US/firefox/desktop/) Firefox browser
    * [Protractor](http://angular.github.io/protractor/) An end-to-end test framework for web applications
    * [Supervisor](http://supervisord.org/) Process controll system used to manage Xvfb and Selenium background processes needed by Protractor
+   * [x11vnc](http://www.karlrunge.com/x11vnc/) x11vnc allows one to view remotely and interact with real X displays (i.e. a display corresponding to a physical monitor, keyboard, and mouse) with any VNC viewer.
 
 Running
 -------
@@ -36,8 +37,15 @@ You can also use the BASEURL variable without container linking, to test any arb
 
 If you want to run the tests interactively you can launch the container and enter into it:
 ```
-CONTAINER=$(docker run -d -v <test project location>:/project --env MANUAL=yes grm/protractor)
-docker exec -ti $CONTAINER sudo -i -u node bash
+CONTAINER=$(docker run -d --link=webe2e:webe2e -v <test project location>:/project --env MANUAL=yes grm/protractor)
+docker exec -ti $CONTAINER bash
+su - node 
+protractor --baseUrl http://webe2e:8080/
+```
+
+You can follow tests using VNC by using :
+```
 vncviewer 127.0.0.1 (password is 1234)
 ```
+
 When inside the container you can run the tests at the console by simply invoking `protractor`. When things don't work as expected, you should check Selenium WebDrover output in `/var/log/supervisor/webdriver-err.log`. When you are done, you terminate the Protractor container with `docker kill $CONTAINER`
