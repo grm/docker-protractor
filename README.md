@@ -22,14 +22,14 @@ Running
 -------
 In order to run tests from a CI system, execute the following:
 ```
-docker run --rm -v <test project location>:/project grm/protractor
+docker run --rm -v <test project location>:/project grm78/protractor
 ```
 The container will terminate automatically after the tests are completed. The output of supervisord visible on the console is not interesting in most circumstances. You should check `target/supervsor.out` file to see the output of Protractor. Dispalying the file in an Unix terminal using `cat` is recommended over opening it using an editor because the file contains ANSI escape sequences.
 
 To run against another container, execute as follows (this example assumes that the image you are testing exposes its web site on port 3000):
 ```
 docker run -d --name=webe2e <image to test>
-docker run --rm --link=webe2e:webe2e -v <test project location>:/project --env BASEURL=http://webe2e:3000/ grm/protractor
+docker run --rm --link=webe2e:webe2e -v <test project location>:/project --env BASEURL=http://webe2e:3000/ grm78/protractor
 docker rm -f webe2e
 ```
 
@@ -37,7 +37,7 @@ You can also use the BASEURL variable without container linking, to test any arb
 
 If you want to run the tests interactively you can launch the container and enter into it:
 ```
-CONTAINER=$(docker run -d --link=webe2e:webe2e -v <test project location>:/project --env MANUAL=yes grm/protractor)
+CONTAINER=$(docker run -d --link=webe2e:webe2e -v <test project location>:/project --env MANUAL=yes grm78/protractor)
 docker exec -ti $CONTAINER bash
 su - node 
 protractor --baseUrl http://webe2e:8080/
